@@ -1179,6 +1179,7 @@ Axi_CDC u_Axi_CDC(
     .axiIn_awlock   (cpu_awlock[0]),
     .axiIn_awcache  (cpu_awcache),
     .axiIn_awprot   (cpu_awprot),
+    
     .axiIn_wvalid   (cpu_wvalid),
     .axiIn_wdata    (cpu_wdata),
     .axiIn_wstrb    (cpu_wstrb),

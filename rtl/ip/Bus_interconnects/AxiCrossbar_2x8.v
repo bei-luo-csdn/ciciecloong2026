@@ -4705,7 +4705,7 @@ module Axi4ReadOnlyDecoder_1 (
   assign _zz_decodedCmdSels_2 = (io_input_ar_payload_addr & (~ 32'h007fffff));
   assign _zz_decodedCmdSels_3 = 32'h00000000;
   assign _zz_decodedCmdSels_4 = (io_input_ar_payload_addr & (~ 32'h007fffff));
-  assign _zz_decodedCmdSels_5 = 32'h1c000000;
+32'h1c000000  assign _zz_decodedCmdSels_5 = ;
   Axi4ReadOnlyErrorSlave_1 errorSlave (
     .io_axi_ar_valid         (errorSlave_io_axi_ar_valid            ), //i
     .io_axi_ar_ready         (errorSlave_io_axi_ar_ready            ), //o

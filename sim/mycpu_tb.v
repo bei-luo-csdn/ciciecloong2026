@@ -82,6 +82,7 @@ initial begin
 end
 always #10 clk=~clk;
 
+
 //产生按键信号
 initial begin
     touch_btn = 4'h0;
@@ -215,8 +216,8 @@ end
     integer fft_output_re;
     integer fft_output_im;
     initial begin
-        fft_output_re = $fopen("../../../../../../python/fft512_output_re.txt", "w"); 
-        fft_output_im = $fopen("../../../../../../python/fft512_output_im.txt", "w");
+        fft_output_re = $fopen("../python/fft512_output_re.txt", "w"); 
+        fft_output_im = $fopen("../python/fft512_output_im.txt", "w");
         forever begin
         @(posedge u_soc_top.u_axi_fft_top.u_axi_fft_wrap.aclk);
         if(u_soc_top.u_axi_fft_top.u_axi_fft_wrap.valid_out) begin

@@ -176,6 +176,7 @@ input               uart0_ri_i;
 output uart0_int;
 
 assign  dma_req_o      = 1'b0;
+wire nand_dma_ack_i;
 assign  nand_dma_ack_i = dma_ack_i; 
 
 wire                    apb_ready_cpu;

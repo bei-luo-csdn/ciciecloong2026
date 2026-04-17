@@ -1,9 +1,10 @@
 // Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-// Date        : Wed Apr  8 08:42:09 2026
-// Host        : LAPTOP-2G409SCH running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode funcsim d:/la32r_soc/rtl/ip/PLL_2019_2/clk_pll_sim_netlist.v
+// Date        : Sat Apr 18 01:35:25 2026
+// Host        : DESKTOP-2V84DQK running 64-bit major release  (build 9200)
+// Command     : write_verilog -force -mode funcsim -rename_top clk_pll -prefix
+//               clk_pll_ clk_pll_sim_netlist.v
 // Design      : clk_pll
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -38,7 +39,6 @@ module clk_pll
         .sys_clk(sys_clk));
 endmodule
 
-(* ORIG_REF_NAME = "clk_pll_clk_wiz" *) 
 module clk_pll_clk_pll_clk_wiz
    (cpu_clk,
     sys_clk,

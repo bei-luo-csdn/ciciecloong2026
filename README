@@ -1,0 +1,3 @@
+mif文件的位置在./rtl/config.h的`SRAM_Init_File修改
+sram里面把Init_File由none改成了`SRAM_Init_File
+1c0000f8:	0280118c 	addi.w	$r12,$r12,4(0x4)
