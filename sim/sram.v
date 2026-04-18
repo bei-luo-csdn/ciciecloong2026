@@ -1,7 +1,7 @@
 `timescale 1ns/100ps
 module sram_sp #(
     parameter AW = 16,
-    parameter Init_File = `SRAM_Init_File
+    parameter Init_File = "none"
 )
 (
     inout  [31:0] ram_data,  //BaseRAM数据，低8位与CPLD串口控制器共享

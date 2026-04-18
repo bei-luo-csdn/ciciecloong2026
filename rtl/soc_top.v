@@ -191,7 +191,7 @@ wire [1 :0] cpu_sync_rresp  ;
 wire        cpu_sync_rlast  ;
 wire        cpu_sync_rvalid ;
 wire        cpu_sync_rready ;
-wire [3 :0] cpu_sync_awid   ;
+wire [4 :0] cpu_sync_awid   ;
 wire [31:0] cpu_sync_awaddr ;
 wire [7 :0] cpu_sync_awlen  ;
 wire [2 :0] cpu_sync_awsize ;
@@ -377,7 +377,7 @@ assign dma_m_awburst    = 2'b0;
 assign dma_m_awlock     = 1'b0;
 assign dma_m_awcache    = 4'b0;
 assign dma_m_awprot     = 3'b0;
-assign dma_m_awvalid    = 1'b1;
+assign dma_m_awvalid    = 1'b0; //
 assign dma_m_wid        = 4'b0;
 assign dma_m_wdata      = 32'b0;
 assign dma_m_wstrb      = 4'b0;
@@ -1220,7 +1220,7 @@ Axi_CDC u_Axi_CDC(
     .axiIn_rid      ({cpu_rid_4,cpu_rid}),
 
     .axiOut_awvalid (cpu_sync_awvalid),
-    .axiOut_awid    (cpu_sync_awid),
+    .axiOut_awid    ({cpu_sync_awid_4,cpu_sync_awid}),
     .axiOut_awaddr  (cpu_sync_awaddr),
     .axiOut_awlen   (cpu_sync_awlen),
     .axiOut_awsize  (cpu_sync_awsize),
@@ -1235,14 +1235,15 @@ Axi_CDC u_Axi_CDC(
     .axiOut_bready  (cpu_sync_bready),
     .axiOut_arvalid (cpu_sync_arvalid),
     .axiOut_araddr  (cpu_sync_araddr),
-    .axiOut_arid    (cpu_sync_arid),
+    .axiOut_arid    ({cpu_sync_arid_4,cpu_sync_arid}),
     .axiOut_arlen   (cpu_sync_arlen),
     .axiOut_arsize  (cpu_sync_arsize),
     .axiOut_arburst (cpu_sync_arburst),
     .axiOut_arlock  (cpu_sync_arlock),
     .axiOut_arcache (cpu_sync_arcache),
     .axiOut_arprot  (cpu_sync_arprot),
-    .axiOut_rready  (cpu_sync_rready)
+    .axiOut_rready  (cpu_sync_rready),
+    .axiOut_rresp ( cpu_sync_rresp )
 );
 
 //--------------------------- 3. SRAM ---------------------------
@@ -1258,8 +1259,8 @@ axi_wrap_ram_sp_external u_axi_ram (
     .axi_arsize     ( ram_arsize     ),
     .axi_arburst    ( ram_arburst    ),
     .axi_arlock     ( ram_arlock     ),
-    .axi_arcache    ( 4'b0011        ),
-    .axi_arprot     ( 3'b000         ),
+    .axi_arcache    ( ram_arcache        ),
+    .axi_arprot     ( ram_arprot         ),
     .axi_arvalid    ( ram_arvalid    ),
     .axi_arready    ( ram_arready    ),
 
@@ -1278,8 +1279,8 @@ axi_wrap_ram_sp_external u_axi_ram (
     .axi_awsize     ( ram_awsize     ),
     .axi_awburst    ( ram_awburst    ),
     .axi_awlock     ( ram_awlock     ),
-    .axi_awcache    ( 4'b0011        ),
-    .axi_awprot     ( 3'b000         ),
+    .axi_awcache    ( ram_awcache        ),
+    .axi_awprot     ( ram_awprot         ),
     .axi_awvalid    ( ram_awvalid    ),
     .axi_awready    ( ram_awready    ),
 
@@ -1313,65 +1314,76 @@ axi_wrap_ram_sp_external u_axi_ram (
     .ext_ram_we_n   ( ext_ram_we_n   )
 );
 
-//--------------------------- 4. UART ---------------------------
-axi_uart_controller u_axi_uart_controller(
-    .clk           (sys_clk),
-    .rst_n         (sys_resetn),
+//--------------------------- 4. UART ---------------------------   
+//AXI2APB  
+axi_uart_controller u_axi_uart_controller (
+    .clk (sys_clk ),
+    .rst_n (sys_resetn ),
+    .axi_s_awid (uart_awid ), 
+    .axi_s_awaddr (uart_awaddr ),    
+    .axi_s_awlen (uart_awlen ),
+    .axi_s_awsize (uart_awsize ),
+    .axi_s_awburst (uart_awburst ),
+    .axi_s_awlock (uart_awlock ),
+    .axi_s_awcache (uart_awcache ),
+    .axi_s_awprot (uart_awprot ),
+    .axi_s_awvalid (uart_awvalid ),
+    .axi_s_awready (uart_awready ),
+    .axi_s_wid (uart_awid ),
+    .axi_s_wdata (uart_wdata ),
+    .axi_s_wstrb (uart_wstrb ),
+    .axi_s_wlast (uart_wlast ),
+    .axi_s_wvalid (uart_wvalid ),
+    .axi_s_wready (uart_wready ),
+    .axi_s_bid (uart_bid ),
+    .axi_s_bresp (uart_bresp ),
+    .axi_s_bvalid (uart_bvalid ),
+    .axi_s_bready (uart_bready ),
+    .axi_s_arid (uart_arid ),
+    .axi_s_araddr (uart_araddr ),
+    .axi_s_arlen (uart_arlen ),
+    .axi_s_arsize (uart_arsize ),
+    .axi_s_arburst (uart_arburst ),
+    .axi_s_arlock (uart_arlock ),
+    .axi_s_arcache (uart_arcache ),
+    .axi_s_arprot (uart_arprot ),
+    .axi_s_arvalid (uart_arvalid ),
+    .axi_s_arready (uart_arready ),
+    .axi_s_rid (uart_rid ),
+    .axi_s_rdata (uart_rdata ),
+    .axi_s_rresp (uart_rresp ),
+    .axi_s_rlast (uart_rlast ),
+    .axi_s_rvalid (uart_rvalid ),
+    .axi_s_rready (uart_rready ),
 
-    .axi_s_awid    (uart_awid),
-    .axi_s_awaddr  (uart_awaddr),
-    .axi_s_awlen   (uart_awlen),
-    .axi_s_awsize  (uart_awsize),
-    .axi_s_awburst (uart_awburst),
-    .axi_s_awlock  (uart_awlock),
-    .axi_s_awcache (uart_awcache),
-    .axi_s_awprot  (uart_awprot),
-    .axi_s_awvalid (uart_awvalid),
-    .axi_s_awready (uart_awready),
+    .apb_rw_dma (1'b0 ),
+    .apb_psel_dma (1'b0 ),
+    .apb_enab_dma (1'b0 ),
+    .apb_addr_dma (20'b0 ),
+    .apb_valid_dma (1'b0 ),
+    .apb_wdata_dma (32'b0 ),
+    .apb_rdata_dma ( ),
 
-    .axi_s_wid     (uart_wid),
-    .axi_s_wdata   (uart_wdata),
-    .axi_s_wstrb   (uart_wstrb),
-    .axi_s_wlast   (uart_wlast),
-    .axi_s_wvalid  (uart_wvalid),
-    .axi_s_wready  (uart_wready),
+    .apb_ready_dma ( ),
+    .dma_grant ( ),
 
-    .axi_s_bid     (uart_bid),
-    .axi_s_bresp   (uart_bresp),
-    .axi_s_bvalid  (uart_bvalid),
-    .axi_s_bready  (uart_bready),
+    .dma_req_o ( ),
+    .dma_ack_i (1'b0 ),
 
-    .axi_s_arid    (uart_arid),
-    .axi_s_araddr  (uart_araddr),
-    .axi_s_arlen   (uart_arlen),
-    .axi_s_arsize  (uart_arsize),
-    .axi_s_arburst (uart_arburst),
-    .axi_s_arlock  (uart_arlock),
-    .axi_s_arcache (uart_arcache),
-    .axi_s_arprot  (uart_arprot),
-    .axi_s_arvalid (uart_arvalid),
-    .axi_s_arready (uart_arready),
-
-    .axi_s_rid     (uart_rid),
-    .axi_s_rdata   (uart_rdata),
-    .axi_s_rresp   (uart_rresp),
-    .axi_s_rlast   (uart_rlast),
-    .axi_s_rvalid  (uart_rvalid),
-    .axi_s_rready  (uart_rready),
-
-    .uart0_txd_i   (uart0_txd_i),
-    .uart0_rxd_i   (uart0_rxd_i),
-    .uart0_txd_o   (uart0_txd_o),
-    .uart0_rxd_o   (uart0_rxd_o),
-    .uart0_txd_oe  (uart0_txd_oe),
-    .uart0_rxd_oe  (uart0_rxd_oe),
-    .uart0_rts_o   (uart0_rts_o),
-    .uart0_cts_i   (uart0_cts_i),
-    .uart0_dtr_o   (uart0_dtr_o),
-    .uart0_dsr_i   (uart0_dsr_i),
-    .uart0_dcd_i   (uart0_dcd_i),
-    .uart0_ri_i    (uart0_ri_i),
-    .uart0_int     (uart0_int)
+    //UART0
+    .uart0_txd_i (uart0_txd_i ),
+    .uart0_txd_o (uart0_txd_o ),
+    .uart0_txd_oe (uart0_txd_oe ),
+    .uart0_rxd_i (uart0_rxd_i ),
+    .uart0_rxd_o (uart0_rxd_o ),
+    .uart0_rxd_oe (uart0_rxd_oe ),
+    .uart0_rts_o (uart0_rts_o ),
+    .uart0_dtr_o (uart0_dtr_o ),
+    .uart0_cts_i (uart0_cts_i ),
+    .uart0_dsr_i (uart0_dsr_i ),
+    .uart0_dcd_i (uart0_dcd_i ),
+    .uart0_ri_i (uart0_ri_i ),
+    .uart0_int (uart0_int )
 );
 endmodule
 
