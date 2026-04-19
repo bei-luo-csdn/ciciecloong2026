@@ -143,12 +143,14 @@ wire [3 :0] cpu_arcache;
 wire [2 :0] cpu_arprot ;
 wire        cpu_arvalid;
 wire        cpu_arready;
+
 wire [3 :0] cpu_rid    ;
 wire [31:0] cpu_rdata  ;
 wire [1 :0] cpu_rresp  ;
 wire        cpu_rlast  ;
 wire        cpu_rvalid ;
 wire        cpu_rready ;
+
 wire [3 :0] cpu_awid   ;
 wire [31:0] cpu_awaddr ;
 wire [7 :0] cpu_awlen  ;
@@ -169,6 +171,7 @@ wire [3 :0] cpu_bid    ;
 wire [1 :0] cpu_bresp  ;
 wire        cpu_bvalid ;
 wire        cpu_bready ;
+
 wire        cpu_sync_awid_4 ;
 wire        cpu_bid_4  ;
 wire        cpu_sync_arid_4 ;
@@ -191,7 +194,7 @@ wire [1 :0] cpu_sync_rresp  ;
 wire        cpu_sync_rlast  ;
 wire        cpu_sync_rvalid ;
 wire        cpu_sync_rready ;
-wire [4 :0] cpu_sync_awid   ;
+wire [3 :0] cpu_sync_awid   ;
 wire [31:0] cpu_sync_awaddr ;
 wire [7 :0] cpu_sync_awlen  ;
 wire [2 :0] cpu_sync_awsize ;
@@ -1220,7 +1223,7 @@ Axi_CDC u_Axi_CDC(
     .axiIn_rid      ({cpu_rid_4,cpu_rid}),
 
     .axiOut_awvalid (cpu_sync_awvalid),
-    .axiOut_awid    ({cpu_sync_awid_4,cpu_sync_awid}),
+    .axiOut_awid    (cpu_sync_awid),
     .axiOut_awaddr  (cpu_sync_awaddr),
     .axiOut_awlen   (cpu_sync_awlen),
     .axiOut_awsize  (cpu_sync_awsize),
@@ -1235,7 +1238,7 @@ Axi_CDC u_Axi_CDC(
     .axiOut_bready  (cpu_sync_bready),
     .axiOut_arvalid (cpu_sync_arvalid),
     .axiOut_araddr  (cpu_sync_araddr),
-    .axiOut_arid    ({cpu_sync_arid_4,cpu_sync_arid}),
+    .axiOut_arid    (cpu_sync_arid),
     .axiOut_arlen   (cpu_sync_arlen),
     .axiOut_arsize  (cpu_sync_arsize),
     .axiOut_arburst (cpu_sync_arburst),
